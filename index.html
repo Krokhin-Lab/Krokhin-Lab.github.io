@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krokhin Lab — University of Manitoba</title>
+    <style>
+        /* ── Reset & base ── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #1a1a1a;
+            background: #ffffff;
+            line-height: 1.7;
+        }
+
+        /* ── Colour tokens (U of M brand) ── */
+        :root {
+            --um-navy:  #002F6C;
+            --um-gold:  #F3D03E;
+            --um-light: #F0F4FA;
+            --um-teal:  #00AB8E;
+            --text:     #1a1a1a;
+            --muted:    #555555;
+        }
+
+        /* ── Header ── */
+        header {
+            background: var(--um-navy);
+            color: #ffffff;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 80px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        header .lab-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        header .header-logos {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        header img {
+            height: 52px;
+            width: auto;
+            /* White logos on navy background look best;
+               if your logos are dark, add: filter: brightness(0) invert(1); */
+        }
+
+        /* ── Navigation ── */
+        nav {
+            background: var(--um-gold);
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            padding: 0.6rem 2rem;
+        }
+
+        nav a {
+            color: var(--um-navy);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.03em;
+            padding: 0.2rem 0;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        nav a:hover { border-bottom-color: var(--um-navy); }
+
+        /* ── Hero ── */
+        .hero {
+            background: var(--um-light);
+            padding: 4rem 2rem 3rem;
+            text-align: center;
+            border-bottom: 4px solid var(--um-gold);
+        }
+
+        .hero h1 {
+            font-size: 2.4rem;
+            color: var(--um-navy);
+            margin-bottom: 0.75rem;
+        }
+
+        .hero .subtitle {
+            font-size: 1.1rem;
+            color: var(--muted);
+            max-width: 700px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .hero .affiliation {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        /* ── Sections ── */
+        section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        section + section {
+            border-top: 1px solid #e0e0e0;
+        }
+
+        h2 {
+            color: var(--um-navy);
+            font-size: 1.5rem;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 3px solid var(--um-gold);
+            display: inline-block;
+        }
+
+        p { margin-bottom: 1rem; color: var(--text); }
+
+        /* ── PI card ── */
+        .pi-card {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+            background: var(--um-light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .pi-photo {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: #c8d3e8;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--um-navy);
+            font-size: 0.8rem;
+            text-align: center;
+            border: 3px solid var(--um-navy);
+        }
+
+        .pi-info h3 {
+            color: var(--um-navy);
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .pi-info .title {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .pi-info a {
+            color: var(--um-teal);
+            text-decoration: none;
+        }
+
+        .pi-info a:hover { text-decoration: underline; }
+
+        /* ── Profile links ── */
+        .profile-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .profile-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.25rem 0.7rem;
+            border-radius: 4px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: 2px solid transparent;
+            transition: opacity 0.2s;
+        }
+
+        .profile-link:hover { opacity: 0.8; }
+
+        .profile-link.scholar    { background: #4285F4; color: #fff; }
+        .profile-link.orcid      { background: #A6CE39; color: #fff; }
+        .profile-link.resgate    { background: #00CCBB; color: #fff; }
+        .profile-link.linkedin   { background: #0A66C2; color: #fff; }
+        .profile-link.university { background: var(--um-navy); color: #fff; }
+        .profile-link.placeholder {
+            background: transparent;
+            border-color: #c0c0c0;
+            color: #999;
+            cursor: default;
+            font-style: italic;
+        }
+
+        /* ── Team grid ── */
+        .team-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        /* ── Team table ── */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background: var(--um-navy);
+            color: #ffffff;
+            padding: 0.6rem 1rem;
+            text-align: left;
+        }
+
+        td {
+            padding: 0.6rem 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:nth-child(even) td { background: var(--um-light); }
+
+        /* ── Software cards ── */
+        .software-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1rem;
+        }
+
+        .software-card {
+            background: var(--um-light);
+            border-radius: 8px;
+            padding: 1.2rem 1.4rem;
+            border-left: 5px solid var(--um-teal);
+        }
+
+        .software-card h3 {
+            color: var(--um-navy);
+            margin-bottom: 0.4rem;
+        }
+
+        .software-card p {
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--um-navy);
+            color: #fff;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            margin-right: 0.4rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .badge.wip {
+            background: var(--um-gold);
+            color: var(--um-navy);
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 0.6rem;
+            padding: 0.4rem 1rem;
+            background: var(--um-teal);
+            color: #fff;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .btn:hover { background: var(--um-navy); }
+
+        /* ── Contact ── */
+        .contact-block {
+            background: var(--um-light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .contact-block a {
+            color: var(--um-teal);
+            text-decoration: none;
+        }
+
+        .contact-block a:hover { text-decoration: underline; }
+
+        /* ── Footer ── */
+        footer {
+            background: var(--um-navy);
+            color: #ccd6ea;
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.85rem;
+        }
+
+        footer .footer-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        footer img {
+            height: 48px;
+            width: auto;
+        }
+
+        footer a { color: var(--um-gold); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header>
+    <span class="lab-name">Krokhin Lab</span>
+    <div class="header-logos">
+        <img src="assets/mcpsb_logo.jpg" alt="Manitoba Centre for Proteomics and Systems Biology">
+        <img src="assets/UM-logo-vertical-CMYK.png" alt="University of Manitoba">
+    </div>
+</header>
+
+<!-- ── Navigation ── -->
+<nav>
+    <a href="#research">Research</a>
+    <a href="#team">Team</a>
+    <a href="#software">Software</a>
+    <a href="#contact">Contact</a>
+</nav>
+
+<!-- ── Hero ── -->
+<div class="hero">
+    <h1>Krokhin Laboratory</h1>
+    <p class="subtitle">
+        Peptide Chromatography &amp; Proteomics
+    </p>
+    <p class="affiliation">
+        Manitoba Centre for Proteomics and Systems Biology &nbsp;·&nbsp;
+        Department of Internal Medicine &nbsp;·&nbsp;
+        University of Manitoba
+    </p>
+</div>
+
+<!-- ── Research ── -->
+<section id="research">
+    <h2>Research</h2>
+    <p>
+        The Krokhin Lab specializes in the chromatographic separations of peptides,
+        with primary applications in proteomics. Our work includes high- and low-pH
+        reversed-phase (RP) chromatography, Strong Anion Exchange (SAX), and
+        hydrophilic interaction liquid chromatography (HILIC).
+    </p>
+    <p>
+        We develop predictive models for peptide retention time and hydrophobicity
+        that enable more accurate and efficient proteomics workflows. Our software
+        tools are freely available and designed to integrate seamlessly into existing
+        mass spectrometry pipelines.
+    </p>
+</section>
+
+<!-- ── Team ── -->
+<section id="team">
+    <h2>Team</h2>
+
+    <div class="team-grid">
+
+        <!-- PI -->
+        <div class="pi-card">
+            <div class="pi-photo">Photo<br>placeholder</div>
+            <div class="pi-info">
+                <h3>Dr. Oleg V. Krokhin</h3>
+                <p class="title">
+                    Principal Investigator &nbsp;·&nbsp;
+                    Associate Professor, Max Rady College of Medicine<br>
+                    Adjunct Professor, Chemistry &amp; Biochemistry and Medical Genetics
+                </p>
+                <p>
+                    Dr. Krokhin is an analytical chemist with over 35 years of experience.
+                    His laboratory is a world leader in peptide chromatography and its
+                    proteomic applications, with contributions spanning SARS, COVID-19,
+                    Ebola, biofuel-producing bacteria, and human disease biomarker discovery.
+                </p>
+                <div class="profile-links">
+                    <a class="profile-link university"
+                       href="https://umanitoba.ca/medicine/faculty-staff/oleg-krokhin"
+                       target="_blank">🎓 University Profile</a>
+                    <a class="profile-link scholar"
+                       href="https://scholar.google.com/citations?user=oleg-krokhin"
+                       target="_blank">Google Scholar</a>
+                    <a class="profile-link orcid"
+                       href="https://orcid.org"
+                       target="_blank">ORCID</a>
+                    <a class="profile-link resgate"
+                       href="https://www.researchgate.net/profile/Oleg-Krokhin"
+                       target="_blank">ResearchGate</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alexandre Préfontaine -->
+        <div class="pi-card">
+            <div class="pi-photo">Photo<br>placeholder</div>
+            <div class="pi-info">
+                <h3>Alexandre Préfontaine</h3>
+                <p class="title">
+                    Master's Student &nbsp;·&nbsp;
+                    Manitoba Centre for Proteomics and Systems Biology
+                </p>
+                <p>
+                    Alexandre's research focuses on peptide hydrophobicity prediction
+                    and chromatographic retention modelling, including the development
+                    of CHIPs — a simple, empirically fitted alternative to the GRAVY
+                    score for estimating peptide behaviour under reversed-phase HPLC
+                    conditions.
+                </p>
+                <div class="profile-links">
+                    <a class="profile-link linkedin"
+                       href="#"
+                       target="_blank">LinkedIn</a>
+                    <a class="profile-link scholar"
+                       href="#"
+                       target="_blank">Google Scholar</a>
+                    <a class="profile-link orcid"
+                       href="#"
+                       target="_blank">ORCID</a>
+                    <a class="profile-link resgate"
+                       href="#"
+                       target="_blank">ResearchGate</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ── Software ── -->
+<section id="software">
+    <h2>Software</h2>
+    <div class="software-grid">
+
+        <div class="software-card">
+            <h3>CHIPs</h3>
+            <p>
+                Chromatographic Hydrophobicity Index for Peptides. Predicts peptide
+                hydrophobicity under reversed-phase HPLC conditions using an additive
+                model with logarithmic length correction. Available as a command-line
+                tool and an interactive web application.
+            </p>
+            <span class="badge">FA</span>
+            <span class="badge">TFA</span>
+            <span class="badge wip">Publication in preparation</span>
+            <br>
+            <a class="btn" href="https://github.com/Krokhin-Lab/CHIPs" target="_blank">
+                GitHub →
+            </a>
+            <a class="btn" href="#" target="_blank">
+                Launch app →
+            </a>
+        </div>
+
+        <!-- Placeholder for future tools -->
+        <div class="software-card" style="border-left-color: #c8d3e8; opacity: 0.6;">
+            <h3>More tools coming</h3>
+            <p>
+                Additional software for peptide retention time prediction and
+                chromatographic method development will be released here as
+                publications are submitted.
+            </p>
+            <span class="badge wip">In development</span>
+        </div>
+
+    </div>
+</section>
+
+<!-- ── Contact ── -->
+<section id="contact">
+    <h2>Contact</h2>
+    <div class="contact-block">
+        <p>
+            <strong>Dr. Oleg V. Krokhin</strong><br>
+            Manitoba Centre for Proteomics and Systems Biology<br>
+            Room 799, John Buhler Research Centre<br>
+            715 McDermot Avenue, Winnipeg, MB &nbsp;R3E 3P4
+        </p>
+        <p>
+            Phone: 204-789-3283<br>
+            Email: <a href="mailto:oleg.krokhin@umanitoba.ca">oleg.krokhin@umanitoba.ca</a>
+        </p>
+        <p>
+            <a href="https://umanitoba.ca/medicine/faculty-staff/oleg-krokhin" target="_blank">
+                University of Manitoba profile →
+            </a>
+            &nbsp;·&nbsp;
+            <a href="https://www.researchgate.net/profile/Oleg-Krokhin" target="_blank">
+                ResearchGate →
+            </a>
+        </p>
+    </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+    <div class="footer-logos">
+        <img src="assets/mcpsb_logo.jpg" alt="MCPSB">
+        <img src="assets/UM-logo-vertical-CMYK.png" alt="University of Manitoba">
+    </div>
+    <p>
+        Krokhin Laboratory &nbsp;·&nbsp;
+        Manitoba Centre for Proteomics and Systems Biology &nbsp;·&nbsp;
+        University of Manitoba
+    </p>
+    <p style="margin-top: 0.5rem;">
+        <a href="https://github.com/Krokhin-Lab" target="_blank">GitHub</a>
+        &nbsp;·&nbsp;
+        <a href="https://umanitoba.ca" target="_blank">University of Manitoba</a>
+    </p>
+</footer>
+
+</body>
+</html>
